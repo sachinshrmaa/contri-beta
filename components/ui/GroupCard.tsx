@@ -22,7 +22,7 @@ interface GroupCardProps {
   name: string;
   id: number;
   type: "trip" | "grocery" | "group";
-  handleDelete: () => void;
+  handleDelete: (id: number) => Promise<void>;
 }
 
 export default function GroupCard({
@@ -66,7 +66,7 @@ export default function GroupCard({
               </div>
               <div>
                 <DropdownMenu.Root>
-                  <DropdownMenu.Trigger asChild>
+                  <DropdownMenu.Trigger>
                     <button>
                       <BsThreeDotsVertical className="text-md md:texl:xl text-gray-600" />
                     </button>
@@ -91,7 +91,7 @@ export default function GroupCard({
       </Box>
 
       <Dialog.Root open={deleteDialog} onOpenChange={setDeleteDialog}>
-        <Dialog.Trigger asChild>
+        <Dialog.Trigger>
           <div style={{ display: "none" }} />
         </Dialog.Trigger>
         <Dialog.Content>
@@ -117,7 +117,7 @@ export default function GroupCard({
       </Dialog.Root>
 
       <Dialog.Root open={inviteDialog} onOpenChange={setInviteDialog}>
-        <Dialog.Trigger asChild>
+        <Dialog.Trigger>
           <div style={{ display: "none" }} />
         </Dialog.Trigger>
         <Dialog.Content>

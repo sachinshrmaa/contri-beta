@@ -34,7 +34,7 @@ const sidebarMenu: SideBarMenu[] = [
 export default function FooterMenu() {
   const pathname = usePathname();
   return (
-    <div className="fixed bottom-0 left-0 right-0  border-t py-3 block md:hidden bg-white shadow-lg z-50">
+    <div className="fixed bottom-0 left-0 right-0  border-t py-3 bg-white shadow-lg z-50">
       <nav className="container mx-auto flex items-center justify-between">
         {sidebarMenu.map((menu, index) => (
           <div

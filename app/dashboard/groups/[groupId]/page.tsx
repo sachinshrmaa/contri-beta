@@ -132,7 +132,7 @@ export default function GroupLog({ params }: { params: { slug: string } }) {
         </div>
 
         <Dialog.Root open={addExpenseDialog} onOpenChange={setAddExpenseDialog}>
-          <Dialog.Trigger asChild>
+          <Dialog.Trigger>
             <div style={{ display: "none" }} />
           </Dialog.Trigger>
           <Dialog.Content>
