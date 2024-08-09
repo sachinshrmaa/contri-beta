@@ -37,7 +37,7 @@ export default function Groups() {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        "http://localhost:3000/api/v1/groups/list-groups",
+        "http://localhost:4000/api/v1/groups/list-groups",
         {
           withCredentials: true,
         }
@@ -59,7 +59,7 @@ export default function Groups() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        "http://localhost:3000/api/v1/groups/create-group",
+        "http://localhost:4000/api/v1/groups/create-group",
         payload,
         { withCredentials: true }
       );
@@ -87,7 +87,7 @@ export default function Groups() {
     };
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/v1/groups/leave-group`,
+        `http://localhost:4000/api/v1/groups/leave-group`,
         payload,
         { withCredentials: true }
       );
@@ -102,6 +102,33 @@ export default function Groups() {
       toast.error("Couldn't delete group. Please try again later.", {
         position: "top-center",
         autoClose: 5000,
+      });
+    }
+  };
+
+  const handleUpdateGroupDetails = async (
+    groupDetails: {
+      name: string;
+      type: string;
+    },
+    id: string
+  ) => {
+    try {
+      await axios.post(
+        `http://localhost:4000/api/v1/groups/edit-group/${id}`,
+        groupDetails,
+        { withCredentials: true }
+      );
+      toast.success("Group updated sucessfully.", {
+        position: "top-center",
+        autoClose: 10000,
+      });
+      fetchGroups();
+    } catch (error: any) {
+      console.log(error);
+      toast.success("Failed to update details.", {
+        position: "top-center",
+        autoClose: 10000,
       });
     }
   };
@@ -190,10 +217,13 @@ export default function Groups() {
         ) : (
           groups?.map((group) => (
             <GroupCard
+              key={group.group_id}
               name={group.name}
               id={group.group_id}
               type={group.type}
+              created_by={group.created_by}
               handleDelete={handleDelete}
+              handleUpdate={handleUpdateGroupDetails}
             />
           ))
         )}

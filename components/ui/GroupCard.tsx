@@ -6,6 +6,7 @@ import {
   Dialog,
   DropdownMenu,
   Flex,
+  Select,
   Text,
   TextField,
 } from "@radix-ui/themes";
@@ -22,23 +23,59 @@ interface GroupCardProps {
   name: string;
   id: number;
   type: "trip" | "grocery" | "group";
+  created_by: string;
   handleDelete: (id: number) => Promise<void>;
+  handleUpdate: (
+    { name, type }: { name: string; type: string },
+    id: string
+  ) => Promise<void>;
 }
 
 export default function GroupCard({
   name,
   id,
   type,
+  created_by,
   handleDelete,
+  handleUpdate,
 }: GroupCardProps) {
   const [deleteDialog, setDeleteDialog] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);
-
+  const [editDialog, setEditDialog] = useState(false);
   const [emails, setEmails] = useState([] as string[]);
+  const [groupDetails, setGroupDetails] = useState({
+    name: name,
+    type: type,
+  });
+
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const handleInvite = async () => {
     console.log("invite friends");
   };
+
+  // const handleUpdateGroupDetails = async () => {
+  //   try {
+  //     setIsUpdating(true);
+  //     await axios.post(
+  //       `http://localhost:4000/api/v1/groups/edit-group/${id}`,
+  //       groupDetails,
+  //       { withCredentials: true }
+  //     );
+  //     toast.success("Group updated sucessfully.", {
+  //       position: "top-center",
+  //       autoClose: 10000,
+  //     });
+  //     setIsUpdating(false);
+  //   } catch (error: any) {
+  //     setIsUpdating(false);
+  //     console.log(error);
+  //     toast.success("Failed to update details.", {
+  //       position: "top-center",
+  //       autoClose: 10000,
+  //     });
+  //   }
+  // };
 
   return (
     <div className="mb-6 hover:bg-green-100 rounded-md">
@@ -64,27 +101,49 @@ export default function GroupCard({
                   </Text>
                 </Link>
               </div>
-              <div>
-                <DropdownMenu.Root>
-                  <DropdownMenu.Trigger>
-                    <button>
-                      <BsThreeDotsVertical className="text-md md:texl:xl text-gray-600" />
-                    </button>
-                  </DropdownMenu.Trigger>
-                  <DropdownMenu.Content align="end">
-                    <DropdownMenu.Item onSelect={() => setInviteDialog(true)}>
-                      Invite Friends
-                    </DropdownMenu.Item>
-                    <DropdownMenu.Item>Edit</DropdownMenu.Item>
-                    <DropdownMenu.Item
-                      onSelect={() => setDeleteDialog(true)}
-                      color="red"
-                    >
-                      Delete
-                    </DropdownMenu.Item>
-                  </DropdownMenu.Content>
-                </DropdownMenu.Root>
-              </div>
+              {user.user_id === created_by ? (
+                <div>
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger>
+                      <button>
+                        <BsThreeDotsVertical className="text-md md:texl:xl text-gray-600" />
+                      </button>
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content align="end">
+                      <DropdownMenu.Item onSelect={() => setInviteDialog(true)}>
+                        Invite Friends
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item onSelect={() => setEditDialog(true)}>
+                        Edit Group
+                      </DropdownMenu.Item>
+                      <DropdownMenu.Item
+                        onSelect={() => setDeleteDialog(true)}
+                        color="red"
+                      >
+                        Leave Group
+                      </DropdownMenu.Item>
+                    </DropdownMenu.Content>
+                  </DropdownMenu.Root>
+                </div>
+              ) : (
+                <div>
+                  <DropdownMenu.Root>
+                    <DropdownMenu.Trigger>
+                      <button>
+                        <BsThreeDotsVertical className="text-md md:texl:xl text-gray-600" />
+                      </button>
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content align="end">
+                      <DropdownMenu.Item
+                        onSelect={() => setDeleteDialog(true)}
+                        color="red"
+                      >
+                        Leave Group
+                      </DropdownMenu.Item>
+                    </DropdownMenu.Content>
+                  </DropdownMenu.Root>
+                </div>
+              )}
             </div>
           </div>
         </Card>
@@ -131,14 +190,9 @@ export default function GroupCard({
               <Text as="div" size="2" mb="1" weight="bold">
                 Email
               </Text>
-              {/* <TextArea
-                  placeholder="Enter email"
-                  name="email"
-                  // onChange={(e) => setEmail(e.target.value)}
-                /> */}
 
               <TextField.Root
-                placeholder="Enter email"
+                placeholder="Press ',' to add multiple emails."
                 name="email"
                 onKeyDown={(e) => {
                   if (e.key === ",") {
@@ -167,6 +221,69 @@ export default function GroupCard({
             </Dialog.Close>
             <Dialog.Close>
               <Button onClick={handleInvite}>Send Invite</Button>
+            </Dialog.Close>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
+
+      <Dialog.Root open={editDialog} onOpenChange={setEditDialog}>
+        <Dialog.Trigger>
+          <div style={{ display: "none" }} />
+        </Dialog.Trigger>
+        <Dialog.Content>
+          <Dialog.Title>Edit Group Details</Dialog.Title>
+
+          <Flex direction="column" gap="3">
+            <div>
+              <Text as="div" size="2" mb="1" weight="medium">
+                Group Name
+              </Text>
+              <TextField.Root
+                defaultValue={groupDetails.name}
+                name="groupName"
+                onChange={(e) =>
+                  setGroupDetails((prev) => ({ ...prev, name: e.target.value }))
+                }
+              />
+            </div>
+
+            <div>
+              <Text as="div" size="2" mb="1" weight="medium">
+                Group Type
+              </Text>
+
+              <Select.Root
+                defaultValue={groupDetails.type}
+                onValueChange={(val) =>
+                  setGroupDetails((prev) => ({
+                    ...prev,
+                    type: val,
+                  }))
+                }
+              >
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Group>
+                    <Select.Label>Group Type</Select.Label>
+                    <Select.Item value="trip">Trip</Select.Item>
+                    <Select.Item value="grocery">Grocery</Select.Item>
+                    <Select.Item value="group">Other</Select.Item>
+                  </Select.Group>
+                </Select.Content>
+              </Select.Root>
+            </div>
+          </Flex>
+
+          <Flex gap="3" mt="4" justify="end">
+            <Dialog.Close>
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            </Dialog.Close>
+            <Dialog.Close>
+              <Button onClick={() => handleUpdate(groupDetails, id)}>
+                Update
+              </Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>
