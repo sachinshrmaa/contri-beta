@@ -36,7 +36,7 @@ export default function JoinGroup({ params }: { params: { groupId: string } }) {
         >
           Contri.
         </Text>
-        <h2 className="text-lg mb-4">Group Joined Successfully.</h2>
+        <h2 className="text-lg mb-4">Joining Group...</h2>
 
         <Link
           href="/dashboard/groups"
