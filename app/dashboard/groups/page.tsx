@@ -81,7 +81,7 @@ export default function Groups() {
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     let payload = {
       groupId: id,
     };
@@ -147,7 +147,7 @@ export default function Groups() {
 
         <Dialog.Root>
           <Dialog.Trigger>
-            <Button disabled={isSubmitting} size="2">
+            <Button disabled={isSubmitting}>
               <Spinner size="1" loading={isSubmitting} />
               <IoMdAdd className="font-bold text-lg" />
               Add Group
@@ -162,7 +162,7 @@ export default function Groups() {
 
             <Flex direction="column" gap="3">
               <div>
-                <Text as="div" mb="1" weight="bold">
+                <Text as="div" size="2" mb="1" weight="medium">
                   Group Name
                 </Text>
                 <TextField.Root
@@ -174,7 +174,7 @@ export default function Groups() {
               </div>
 
               <div>
-                <Text as="div" mb="1" weight="bold">
+                <Text as="div" size="2" mb="1" weight="medium">
                   Group Type
                 </Text>
 

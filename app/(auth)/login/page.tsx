@@ -90,7 +90,7 @@ export default function Login() {
               </Box>
 
               <Box className="mb-5">
-                <Button size="2" type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting}>
                   <Spinner loading={isSubmitting} />
                   {isSubmitting ? "Logging in" : "Login"}
                 </Button>

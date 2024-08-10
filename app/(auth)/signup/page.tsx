@@ -25,7 +25,7 @@ export default function SignUp() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        `${process.env.CONTRI_BACKEND}auth/signup`,
+        `http://localhost:4000/api/v1/auth/signup`,
         user,
         { withCredentials: true }
       );
@@ -39,7 +39,7 @@ export default function SignUp() {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <div className="px-4 bg-gradient-to-r from-green-100 via-indigo-100	to-blue-50">
       <Flex justify="center" align="center" className="h-screen">
@@ -102,7 +102,7 @@ export default function SignUp() {
               </Box>
 
               <Box className="mb-5">
-                <Button size="2" type="submit" disabled={isSubmitting}>
+                <Button type="submit" disabled={isSubmitting}>
                   <Spinner loading={isSubmitting} />
                   {isSubmitting ? "Signing Up" : "Sign Up"}
                 </Button>

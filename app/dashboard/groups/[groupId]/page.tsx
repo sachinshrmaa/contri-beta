@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import {
+  Avatar,
   Button,
   Dialog,
   Flex,
@@ -15,6 +16,12 @@ import { toast } from "react-toastify";
 import { GiPalmTree } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa6";
 
+const dummyUsers = [
+  { name: "sangita", balance: 316.63 }, // owes 83.33
+  { name: "sachin", balance: -53.32 }, // to be paid 146.66
+  { name: "manish", balance: -263.32 }, // owes 63.34
+];
+
 export default function GroupLog({ params }: { params: { groupId: string } }) {
   const [addExpenseDialog, setAddExpenseDialog] = useState(false);
   const [settleExpenseDialog, setSettleExpenseDialog] = useState(false);
@@ -24,12 +31,14 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
   const [expenseData, setExpenseData] = useState({
     title: "",
     amount: 0,
-    splitRatio: 50,
+    splitRatio: 100,
   });
   const [groupDetails, setGroupDetails] = useState({
     name: "",
     type: "",
   });
+  const [groupMembersBalance, setGroupMembersBalance] = useState([]);
+  const [settlements, setSettlements] = useState(null);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -38,6 +47,32 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     fetchUserGroupBalance();
     fetchGroupDetails();
   }, []);
+
+  const settleBalances = (users) => {
+    const creditors = users.filter((user) => user.balance > 0);
+    const debtors = users.filter((user) => user.balance < 0);
+
+    let settlements = [];
+
+    creditors.forEach((creditor) => {
+      debtors.forEach((debtor) => {
+        if (debtor.balance !== 0 && creditor.balance !== 0) {
+          let amount = Math.min(Math.abs(debtor.balance), creditor.balance);
+
+          settlements.push({
+            from: debtor.name,
+            to: creditor.name,
+            amount: amount.toFixed(2),
+          });
+
+          debtor.balance += amount; // Reduces the debt
+          creditor.balance -= amount; // Reduces the credit
+        }
+      });
+    });
+
+    setSettlements(settlements);
+  };
 
   const handleAddExpense = async () => {
     let payload = {
@@ -113,6 +148,28 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     }
   };
 
+  const fetchAllUsersGroupBalance = async () => {
+    let payload = {
+      groupId: `${params.groupId}`,
+    };
+
+    try {
+      setIsLoading(true);
+      const res = await axios.post(
+        `http://localhost:4000/api/v1/expenses/members-balance`,
+        payload,
+        { withCredentials: true }
+      );
+
+      setGroupMembersBalance(res?.data);
+      settleBalances(res?.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
   const fetchGroupDetails = async () => {
     let payload = {
       groupId: `${params.groupId}`,
@@ -136,7 +193,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
 
   return (
     <>
-      <div className="fixed top-0 border-b py-2 px-4 w-full flex justify-between items-center bg-white shadow-sm">
+      <div className="sticky top-0 border-b py-2 px-4 w-full flex justify-between items-center bg-white shadow-sm z-50">
         <div className="flex items-center gap-3">
           {groupDetails.type === "trip" && (
             <GiPalmTree className="text-3xl md:text-5xl text-green-300" />
@@ -154,7 +211,10 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
           className={`${
             userBalance >= 0 ? "bg-green-200" : "bg-red-100"
           } p-1 px-4 rounded-md text-center cursor-pointer`}
-          onClick={() => setSettleExpenseDialog(true)}
+          onClick={() => {
+            setSettleExpenseDialog(true);
+            fetchAllUsersGroupBalance();
+          }}
         >
           <span className="font-bold mb-0 block text-sm">₹ {userBalance} </span>
           <span className="text-xs font-bold text-slate-700">
@@ -164,7 +224,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
       </div>
 
       <div className="container">
-        <div className="my-[100px]">
+        <div className="mt-5">
           {expenses.length === 0 && !isLoading && (
             <div className="flex justify-center items-center h-[50vh]">
               <Text color="gray" size="2">
@@ -186,14 +246,19 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
               >
                 <div
                   className={`${
-                    expense.name === "sachin" ? "bg-green-50" : "bg-red-50"
-                  } p-3 rounded-lg w-[70%] flex justify-between shadow`}
+                    expense.name === user.name ? "bg-green-50" : "bg-red-50"
+                  } border p-3 rounded-lg w-[70%] flex justify-between shadow-sm`}
                 >
-                  <div>
-                    <p className="text-slate-700 font-medium">{expense.name}</p>
-                    <small className="text-slate-500 ">
-                      {expense.created_at}
-                    </small>
+                  <div className="flex items-center gap-4">
+                    <Avatar fallback={expense.name[0]} size="4" />
+                    <div>
+                      <p className="text-slate-700 font-medium">
+                        {expense.name === user.name ? "You" : expense.name}
+                      </p>
+                      <small className="text-slate-500 ">
+                        {expense.created_at}
+                      </small>
+                    </div>
                   </div>
 
                   <div className="flex flex-col items-end space-y-1">
@@ -212,7 +277,8 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
           <Link
             href="#"
             onClick={() => setAddExpenseDialog(true)}
-            className="bg-green-600 hover:bg-green-500 text-white text-2xl rounded-full w-12 h-12 flex items-center justify-center shadow-md"
+            className="bg-green-400 hover:bg-green-500 text-white text-2xl rounded-lg shadow-md w-12 h-12 flex items-center justify-center"
+            // className="bg-green-600 hover:bg-green-500 text-white text-2xl rounded-full w-12 h-12 flex items-center justify-center shadow-md"
           >
             +
           </Link>
@@ -266,14 +332,12 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
 
           <Flex gap="3" mt="4" justify="end">
             <Dialog.Close>
-              <Button variant="soft" color="gray" size="1">
+              <Button variant="soft" color="gray">
                 Cancel
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button onClick={handleAddExpense} size="1">
-                Add
-              </Button>
+              <Button onClick={handleAddExpense}>Add</Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>
@@ -292,21 +356,30 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
             You can settle the payment by paying/recieving the amount.
           </Dialog.Description>
 
-          <Text as="div" size="1" mb="1" weight="medium">
+          <Text as="div" size="1" mb="3" weight="medium">
+            {settlements &&
+              settlements.map((settlement, index) => (
+                <div key={index}>
+                  {user.name === settlement.from ? "You" : settlement.from} owes{" "}
+                  {user.name === settlement.to ? "You" : settlement.to} ₹{" "}
+                  {settlement.amount}
+                </div>
+              ))}
+          </Text>
+
+          <Text as="div" size="1" mb="1">
             By clicking on settle, you are confirming that you've paid/receive
             the money.
           </Text>
 
           <Flex gap="3" mt="4" justify="end">
             <Dialog.Close>
-              <Button variant="soft" color="gray" size="1">
+              <Button variant="soft" color="gray">
                 Cancel
               </Button>
             </Dialog.Close>
             <Dialog.Close>
-              <Button onClick={() => {}} size="1">
-                Settle
-              </Button>
+              <Button onClick={() => {}}>Settle</Button>
             </Dialog.Close>
           </Flex>
         </Dialog.Content>

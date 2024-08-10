@@ -17,14 +17,13 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaShoppingBasket } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
 import { GiPalmTree } from "react-icons/gi";
-import { toast } from "react-toastify";
 
 interface GroupCardProps {
   name: string;
-  id: number;
-  type: "trip" | "grocery" | "group";
+  id: string;
+  type: string;
   created_by: string;
-  handleDelete: (id: number) => Promise<void>;
+  handleDelete: (id: string) => Promise<void>;
   handleUpdate: (
     { name, type }: { name: string; type: string },
     id: string
@@ -53,29 +52,6 @@ export default function GroupCard({
   const handleInvite = async () => {
     console.log("invite friends");
   };
-
-  // const handleUpdateGroupDetails = async () => {
-  //   try {
-  //     setIsUpdating(true);
-  //     await axios.post(
-  //       `http://localhost:4000/api/v1/groups/edit-group/${id}`,
-  //       groupDetails,
-  //       { withCredentials: true }
-  //     );
-  //     toast.success("Group updated sucessfully.", {
-  //       position: "top-center",
-  //       autoClose: 10000,
-  //     });
-  //     setIsUpdating(false);
-  //   } catch (error: any) {
-  //     setIsUpdating(false);
-  //     console.log(error);
-  //     toast.success("Failed to update details.", {
-  //       position: "top-center",
-  //       autoClose: 10000,
-  //     });
-  //   }
-  // };
 
   return (
     <div className="mb-6 hover:bg-green-100 rounded-md">
