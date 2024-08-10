@@ -91,8 +91,16 @@ export default function GroupCard({
                       </button>
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content align="end">
-                      <DropdownMenu.Item onSelect={() => setInviteDialog(true)}>
+                      {/* <DropdownMenu.Item onSelect={() => setInviteDialog(true)}>
                         Invite Friends
+                      </DropdownMenu.Item> */}
+                      <DropdownMenu.Item>
+                        <a
+                          href={`https://wa.me/?text=http://localhost:3000/join-group/${id}`}
+                          target="_blank"
+                        >
+                          Invite Friends
+                        </a>
                       </DropdownMenu.Item>
                       <DropdownMenu.Item onSelect={() => setEditDialog(true)}>
                         Edit Group
@@ -135,10 +143,9 @@ export default function GroupCard({
           <div style={{ display: "none" }} />
         </Dialog.Trigger>
         <Dialog.Content>
-          <Dialog.Title>Delete Group</Dialog.Title>
+          <Dialog.Title>Leave Group</Dialog.Title>
           <Dialog.Description size="2" mb="4">
-            Are you sure you want to delete this group? This action cannot be
-            undone.
+            Are you sure you want to leave this group?
           </Dialog.Description>
 
           <Flex gap="3" mt="4" justify="end">
@@ -149,7 +156,7 @@ export default function GroupCard({
             </Dialog.Close>
             <Dialog.Close>
               <Button color="red" onClick={() => handleDelete(id)}>
-                Delete
+                Leave
               </Button>
             </Dialog.Close>
           </Flex>
