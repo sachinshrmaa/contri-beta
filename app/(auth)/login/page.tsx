@@ -26,7 +26,7 @@ export default function Login() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/auth/login`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/auth/login`,
         user,
         { withCredentials: true }
       );

@@ -41,7 +41,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
   const [settlements, setSettlements] = useState(null);
 
   // const user = JSON.parse(localStorage.getItem("user"));
-  const user = {name:"sachin", email: "sachin@contri.com"};
+  const user = { name: "sachin", email: "sachin@contri.com" };
 
   useEffect(() => {
     fetchGroupExpenses();
@@ -86,7 +86,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       await axios.post(
-        `http://localhost:4000/api/v1/expenses/add-expense`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/add-expense`,
         payload,
         { withCredentials: true }
       );
@@ -115,7 +115,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/expenses/get-expenses`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/get-expenses`,
         payload,
         { withCredentials: true }
       );
@@ -136,7 +136,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/expenses/get-balance`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/get-balance`,
         payload,
         { withCredentials: true }
       );
@@ -157,7 +157,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/expenses/members-balance`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/members-balance`,
         payload,
         { withCredentials: true }
       );
@@ -179,7 +179,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/groups/get-details`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/get-details`,
         payload,
         { withCredentials: true }
       );

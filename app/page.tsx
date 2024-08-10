@@ -1,11 +1,14 @@
-import { Button } from "@radix-ui/themes";
+import Link from "next/link";
 import React from "react";
 
 export default function HomePage() {
   return (
-    <div>
-      <h1 className="underline">Homepage</h1>
-      <Button>Click me</Button>
+    <div className="container py-4">
+      <h1>Contri</h1>
+      <p>Contri is a platform for managing group projects.</p>
+      <Link href="/login" className="underline">
+        Login
+      </Link>
     </div>
   );
 }

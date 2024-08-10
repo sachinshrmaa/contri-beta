@@ -24,7 +24,7 @@ export default function NavBar() {
 
   const handleLogout = async () => {
     await axios
-      .get(`http://localhost:4000/api/v1/auth/logout`, {
+      .get(`${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/auth/logout`, {
         withCredentials: true,
       })
       .then((res) => {

@@ -25,7 +25,7 @@ export default function SignUp() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/auth/signup`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/auth/signup`,
         user,
         { withCredentials: true }
       );

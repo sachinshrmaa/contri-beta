@@ -9,7 +9,6 @@ import {
   TextField,
   Spinner,
   Tooltip,
-  IconButton,
   Select,
 } from "@radix-ui/themes";
 import GroupCard from "../../../components/ui/GroupCard";
@@ -37,7 +36,7 @@ export default function Groups() {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/v1/groups/list-groups",
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/list-groups`,
         {
           withCredentials: true,
         }
@@ -59,7 +58,7 @@ export default function Groups() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        "http://localhost:4000/api/v1/groups/create-group",
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/create-group`,
         payload,
         { withCredentials: true }
       );
@@ -87,7 +86,7 @@ export default function Groups() {
     };
     try {
       const res = await axios.post(
-        `http://localhost:4000/api/v1/groups/leave-group`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/leave-group`,
         payload,
         { withCredentials: true }
       );
@@ -115,7 +114,7 @@ export default function Groups() {
   ) => {
     try {
       await axios.post(
-        `http://localhost:4000/api/v1/groups/edit-group/${id}`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/edit-group/${id}`,
         groupDetails,
         { withCredentials: true }
       );

@@ -16,7 +16,7 @@ export default function Activity() {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:4000/api/v1/activities/all`,
+        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/activities/all`,
         { withCredentials: true }
       );
       setUserActivities(res?.data);

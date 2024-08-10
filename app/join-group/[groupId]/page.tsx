@@ -2,7 +2,6 @@
 import { Text } from "@radix-ui/themes";
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -11,7 +10,7 @@ export default function JoinGroup({ params }: { params: { groupId: string } }) {
     const joinGroup = async () => {
       try {
         await axios.get(
-          `http://localhost:4000/api/v1/groups/join-group/${params.groupId}`,
+          `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/join-group/${params.groupId}`,
           { withCredentials: true }
         );
         window.location.href = "/dashboard/groups";
