@@ -16,7 +16,7 @@ export default function Activity() {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/activities/all`,
+        `http://contri-api.sachinbuilds.in/api/v1/activities/all`,
         { withCredentials: true }
       );
       setUserActivities(res?.data);

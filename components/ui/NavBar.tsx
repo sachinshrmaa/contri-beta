@@ -24,7 +24,7 @@ export default function NavBar() {
 
   const handleLogout = async () => {
     await axios
-      .get(`${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/auth/logout`, {
+      .get(`http://contri-api.sachinbuilds.in/api/v1/auth/logout`, {
         withCredentials: true,
       })
       .then((res) => {

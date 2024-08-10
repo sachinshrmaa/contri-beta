@@ -86,7 +86,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/add-expense`,
+        `http://contri-api.sachinbuilds.in/api/v1/expenses/add-expense`,
         payload,
         { withCredentials: true }
       );
@@ -115,7 +115,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/get-expenses`,
+        `http://contri-api.sachinbuilds.in/api/v1/expenses/get-expenses`,
         payload,
         { withCredentials: true }
       );
@@ -136,7 +136,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/get-balance`,
+        `http://contri-api.sachinbuilds.in/api/v1/expenses/get-balance`,
         payload,
         { withCredentials: true }
       );
@@ -157,7 +157,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/expenses/members-balance`,
+        `http://contri-api.sachinbuilds.in/api/v1/expenses/members-balance`,
         payload,
         { withCredentials: true }
       );
@@ -179,7 +179,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/get-details`,
+        `http://contri-api.sachinbuilds.in/api/v1/groups/get-details`,
         payload,
         { withCredentials: true }
       );

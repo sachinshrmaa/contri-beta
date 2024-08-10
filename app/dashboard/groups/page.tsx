@@ -36,7 +36,7 @@ export default function Groups() {
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/list-groups`,
+        `http://contri-api.sachinbuilds.in/api/v1/groups/list-groups`,
         {
           withCredentials: true,
         }
@@ -58,7 +58,7 @@ export default function Groups() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/create-group`,
+        `http://contri-api.sachinbuilds.in/api/v1/groups/create-group`,
         payload,
         { withCredentials: true }
       );
@@ -86,7 +86,7 @@ export default function Groups() {
     };
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/leave-group`,
+        `http://contri-api.sachinbuilds.in/api/v1/groups/leave-group`,
         payload,
         { withCredentials: true }
       );
@@ -114,7 +114,7 @@ export default function Groups() {
   ) => {
     try {
       await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/groups/edit-group/${id}`,
+        `http://contri-api.sachinbuilds.in/api/v1/groups/edit-group/${id}`,
         groupDetails,
         { withCredentials: true }
       );

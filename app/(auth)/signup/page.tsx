@@ -25,7 +25,7 @@ export default function SignUp() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_CONTRI_BACKEND}/auth/signup`,
+        `http://contri-api.sachinbuilds.in/api/v1/auth/signup`,
         user,
         { withCredentials: true }
       );
