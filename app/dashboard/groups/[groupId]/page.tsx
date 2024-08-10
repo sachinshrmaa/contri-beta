@@ -40,7 +40,8 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
   const [groupMembersBalance, setGroupMembersBalance] = useState([]);
   const [settlements, setSettlements] = useState(null);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const user = {name:"sachin", email: "sachin@contri.com"};
 
   useEffect(() => {
     fetchGroupExpenses();

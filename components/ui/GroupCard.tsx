@@ -47,7 +47,12 @@ export default function GroupCard({
     type: type,
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const user = {
+    user_id: "u2lTU8iqV7XJMkMbQCXHc",
+    name: "sachin",
+    email: "sachin@contri.com",
+  };
 
   const handleInvite = async () => {
     console.log("invite friends");

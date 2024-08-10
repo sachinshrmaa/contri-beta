@@ -2,7 +2,6 @@
 import { Avatar, Box, DropdownMenu, Flex, Link, Text } from "@radix-ui/themes";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { CiLogout } from "react-icons/ci";
 import { FaUser } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 
@@ -25,7 +24,7 @@ export default function NavBar() {
 
   const handleLogout = async () => {
     await axios
-      .get("/api/logout", {
+      .get(`http://localhost:4000/api/v1/auth/logout`, {
         withCredentials: true,
       })
       .then((res) => {

@@ -16,7 +16,8 @@ export default function ActivityCard({
   group,
   timestamp,
 }: ActivityCardProps) {
-  const loggedUser = JSON.parse(localStorage.getItem("user"));
+  // const loggedUser = JSON.parse(localStorage.getItem("user"));
+  const loggedUser = {name:"sachin", email: "sachin@contri.com"};
 
   return (
     <div className="mb-4 hover:bg-green-100 rounded-md">

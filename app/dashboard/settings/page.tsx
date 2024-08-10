@@ -5,7 +5,8 @@ import React from "react";
 import { FaCreditCard, FaTrash } from "react-icons/fa6";
 
 export default function Settings() {
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const user = {name:"sachin", email: "sachin@contri.com"};
 
   return (
     <div className="container">
