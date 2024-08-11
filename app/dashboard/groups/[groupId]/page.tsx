@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Avatar,
   Button,
@@ -15,14 +15,11 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { GiPalmTree } from "react-icons/gi";
 import { FaUsers } from "react-icons/fa6";
-
-const dummyUsers = [
-  { name: "sangita", balance: 316.63 }, // owes 83.33
-  { name: "sachin", balance: -53.32 }, // to be paid 146.66
-  { name: "manish", balance: -263.32 }, // owes 63.34
-];
+import { UserContext } from "../../../../context/UserContext";
+import moment from "moment-timezone";
 
 export default function GroupLog({ params }: { params: { groupId: string } }) {
+  const context = useContext(UserContext);
   const [addExpenseDialog, setAddExpenseDialog] = useState(false);
   const [settleExpenseDialog, setSettleExpenseDialog] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -39,9 +36,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
   });
   const [groupMembersBalance, setGroupMembersBalance] = useState([]);
   const [settlements, setSettlements] = useState(null);
-
-  // const user = JSON.parse(localStorage.getItem("user"));
-  const user = { name: "sachin", email: "sachin@contri.com" };
+  const { user } = context;
 
   useEffect(() => {
     fetchGroupExpenses();
@@ -86,7 +81,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       await axios.post(
-        `http://contri-api.sachinbuilds.in/api/v1/expenses/add-expense`,
+        `http://localhost:4000/api/v1/expenses/add-expense`,
         payload,
         { withCredentials: true }
       );
@@ -115,7 +110,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://contri-api.sachinbuilds.in/api/v1/expenses/get-expenses`,
+        `http://localhost:4000/api/v1/expenses/get-expenses`,
         payload,
         { withCredentials: true }
       );
@@ -136,7 +131,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://contri-api.sachinbuilds.in/api/v1/expenses/get-balance`,
+        `http://localhost:4000/api/v1/expenses/get-balance`,
         payload,
         { withCredentials: true }
       );
@@ -157,7 +152,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://contri-api.sachinbuilds.in/api/v1/expenses/members-balance`,
+        `http://localhost:4000/api/v1/expenses/members-balance`,
         payload,
         { withCredentials: true }
       );
@@ -179,7 +174,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://contri-api.sachinbuilds.in/api/v1/groups/get-details`,
+        `http://localhost:4000/api/v1/groups/get-details`,
         payload,
         { withCredentials: true }
       );
@@ -242,28 +237,36 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
               <div
                 key={index}
                 className={`flex ${
-                  expense.name === user.name ? "justify-end" : "justify-start"
+                  expense.name === user?.name ? "justify-end" : "justify-start"
                 } mb-3`}
               >
                 <div
                   className={`${
-                    expense.name === user.name ? "bg-green-50" : "bg-red-50"
+                    expense.name === user?.name ? "bg-green-50" : "bg-red-50"
                   } border p-3 rounded-lg w-[70%] flex justify-between shadow-sm`}
                 >
                   <div className="flex items-center gap-4">
                     <Avatar fallback={expense.name[0]} size="4" />
                     <div>
                       <p className="text-slate-700 font-medium">
-                        {expense.name === user.name ? "You" : expense.name}
+                        {expense.name === user?.name ? "You" : expense.name}
                       </p>
                       <small className="text-slate-500 ">
-                        {expense.created_at}
+                        {moment(expense.created_at)
+                          .tz("Asia/Kolkata")
+                          .format("h:mm a • DD MMM, YYYY")}
                       </small>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-end space-y-1">
-                    <h1 className="font-bold text-xl text-slate-800">
+                    <h1
+                      className={`font-semibold text-lg ${
+                        expense.name === user?.name
+                          ? "text-green-800"
+                          : "text-red-800"
+                      }`}
+                    >
                       ₹ {expense.amount}
                     </h1>
                     <p className="text-slate-600 text-sm">{expense.title}</p>

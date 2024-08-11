@@ -26,7 +26,7 @@ export default function Login() {
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        `http://contri-api.sachinbuilds.in/api/v1/auth/login`,
+        `http://localhost:4000/api/v1/auth/login`,
         user,
         { withCredentials: true }
       );

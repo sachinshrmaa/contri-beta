@@ -1,30 +1,18 @@
 "use client";
 import { Avatar, Box, DropdownMenu, Flex, Link, Text } from "@radix-ui/themes";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
+import { UserContext } from "../../context/UserContext";
 
 export default function NavBar() {
-  const [user, setUser] = useState({
-    name: "",
-    email: "",
-  });
-
-  useEffect(() => {
-    getLoggedInUser();
-  }, []);
-
-  const getLoggedInUser = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      setUser((prev) => ({ ...prev, name: user.name, email: user.email }));
-    }
-  };
+  const context = useContext(UserContext);
+  const { user } = context;
 
   const handleLogout = async () => {
     await axios
-      .get(`http://contri-api.sachinbuilds.in/api/v1/auth/logout`, {
+      .get(`http://localhost:4000/api/v1/auth/logout`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -48,12 +36,16 @@ export default function NavBar() {
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Link>
-              <Avatar size="3" fallback={user.name.slice(0, 1)} radius="full" />
+              <Avatar
+                size="3"
+                fallback={user?.name?.slice(0, 1)}
+                radius="full"
+              />
             </Link>
           </DropdownMenu.Trigger>
           <DropdownMenu.Content align="center">
             <DropdownMenu.Item disabled>
-              <FaUser className="text-sm" /> {user.email}
+              <FaUser className="text-sm" /> {user?.email}
             </DropdownMenu.Item>
             <DropdownMenu.Item onClick={handleLogout}>
               <RiLogoutBoxLine /> Logout

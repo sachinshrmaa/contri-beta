@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Badge,
   Box,
@@ -10,13 +12,13 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { FaShoppingBasket } from "react-icons/fa";
 import { FaUsers } from "react-icons/fa6";
 import { GiPalmTree } from "react-icons/gi";
+import { UserContext } from "../../context/UserContext";
 
 interface GroupCardProps {
   name: string;
@@ -47,12 +49,15 @@ export default function GroupCard({
     type: type,
   });
 
+  const context = useContext(UserContext);
+  const { user } = context;
+
   // const user = JSON.parse(localStorage.getItem("user"));
-  const user = {
-    user_id: "u2lTU8iqV7XJMkMbQCXHc",
-    name: "sachin",
-    email: "sachin@contri.com",
-  };
+  // const user = {
+  //   user_id: "u2lTU8iqV7XJMkMbQCXHc",
+  //   name: "sachin",
+  //   email: "sachin@contri.com",
+  // };
 
   const handleInvite = async () => {
     console.log("invite friends");
@@ -82,7 +87,7 @@ export default function GroupCard({
                   </Text>
                 </Link>
               </div>
-              {user.user_id === created_by ? (
+              {user?.user_id === created_by ? (
                 <div>
                   <DropdownMenu.Root>
                     <DropdownMenu.Trigger>

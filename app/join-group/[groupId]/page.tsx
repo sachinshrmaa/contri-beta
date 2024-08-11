@@ -10,7 +10,7 @@ export default function JoinGroup({ params }: { params: { groupId: string } }) {
     const joinGroup = async () => {
       try {
         await axios.get(
-          `http://contri-api.sachinbuilds.in/api/v1/groups/join-group/${params.groupId}`,
+          `http://localhost:4000/api/v1/groups/join-group/${params.groupId}`,
           { withCredentials: true }
         );
         window.location.href = "/dashboard/groups";
