@@ -30,7 +30,7 @@ export default function Login() {
         { withCredentials: true }
       );
       localStorage.setItem("user", JSON.stringify(res?.data?.user));
-      router.push("/login");
+      router.push("/dashboard/groups");
       setIsSubmitting(false);
     } catch (error) {
       toast.error("Invalid email or password", {
