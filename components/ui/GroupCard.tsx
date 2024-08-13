@@ -52,13 +52,6 @@ export default function GroupCard({
   const context = useContext(UserContext);
   const { user } = context;
 
-  // const user = JSON.parse(localStorage.getItem("user"));
-  // const user = {
-  //   user_id: "u2lTU8iqV7XJMkMbQCXHc",
-  //   name: "sachin",
-  //   email: "sachin@contri.com",
-  // };
-
   const handleInvite = async () => {
     console.log("invite friends");
   };
@@ -101,7 +94,7 @@ export default function GroupCard({
                       </DropdownMenu.Item> */}
                       <DropdownMenu.Item>
                         <a
-                          href={`https://wa.me/?text=http://localhost:3000/join-group/${id}`}
+                          href={`https://wa.me/?text=https://contri.sachinbuilds.in/join-group/${id}`}
                           target="_blank"
                         >
                           Invite Friends

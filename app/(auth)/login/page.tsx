@@ -12,26 +12,24 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function Login() {
   const [user, setUser] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const router = useRouter();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     try {
       setIsSubmitting(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/auth/login`,
+        `https://api-contri.sachinbuilds.in/api/v1/auth/login`,
         user,
         { withCredentials: true }
       );
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      router.push("/dashboard/groups");
+      localStorage.setItem("user", JSON.stringify(res?.data?.user));
+      window.location.href = "/dashboard/groups";
       setIsSubmitting(false);
     } catch (error) {
       toast.error("Invalid email or password", {

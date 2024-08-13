@@ -2,9 +2,12 @@ import axios from "axios";
 
 export const getLoggedInUser = async () => {
   try {
-    const res = await axios.get(`http://localhost:4000/api/v1/auth/`, {
-      withCredentials: true,
-    });
+    const res = await axios.get(
+      `https://api-contri.sachinbuilds.in/api/v1/auth/`,
+      {
+        withCredentials: true,
+      }
+    );
     console.log("from utils", res.data?.user);
     return res?.data?.user;
   } catch (error) {

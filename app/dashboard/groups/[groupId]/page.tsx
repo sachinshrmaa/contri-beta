@@ -28,7 +28,6 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
   const [expenseData, setExpenseData] = useState({
     title: "",
     amount: 0,
-    splitRatio: 100,
   });
   const [groupDetails, setGroupDetails] = useState({
     name: "",
@@ -42,6 +41,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     fetchGroupExpenses();
     fetchUserGroupBalance();
     fetchGroupDetails();
+    fetchAllUsersGroupBalance();
   }, []);
 
   const settleBalances = (users) => {
@@ -75,13 +75,13 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
       groupId: `${params.groupId}`,
       title: expenseData.title,
       amount: expenseData.amount,
-      splitRatio: expenseData.splitRatio,
+      splitRatio: 100 / groupMembersBalance.length,
     };
 
     try {
       setIsLoading(true);
       await axios.post(
-        `http://localhost:4000/api/v1/expenses/add-expense`,
+        `https://api-contri.sachinbuilds.in/api/v1/expenses/add-expense`,
         payload,
         { withCredentials: true }
       );
@@ -110,7 +110,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/expenses/get-expenses`,
+        `https://api-contri.sachinbuilds.in/api/v1/expenses/get-expenses`,
         payload,
         { withCredentials: true }
       );
@@ -131,7 +131,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/expenses/get-balance`,
+        `https://api-contri.sachinbuilds.in/api/v1/expenses/get-balance`,
         payload,
         { withCredentials: true }
       );
@@ -152,7 +152,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/expenses/members-balance`,
+        `https://api-contri.sachinbuilds.in/api/v1/expenses/members-balance`,
         payload,
         { withCredentials: true }
       );
@@ -174,7 +174,7 @@ export default function GroupLog({ params }: { params: { groupId: string } }) {
     try {
       setIsLoading(true);
       const res = await axios.post(
-        `http://localhost:4000/api/v1/groups/get-details`,
+        `https://api-contri.sachinbuilds.in/api/v1/groups/get-details`,
         payload,
         { withCredentials: true }
       );

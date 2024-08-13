@@ -16,7 +16,7 @@ export default function Activity() {
     try {
       setIsLoading(true);
       const res = await axios.get(
-        `http://localhost:4000/api/v1/activities/all`,
+        `https://api-contri.sachinbuilds.in/api/v1/activities/all`,
         { withCredentials: true }
       );
       setUserActivities(res?.data);
@@ -52,13 +52,14 @@ export default function Activity() {
             />
           ))
         )}
+        {userActivities.length === 0 && !isLoading && (
+          <div className="mt-20 text-center">
+            <Text color="gray" size="2">
+              No activities. Create new expense to get started.
+            </Text>
+          </div>
+        )}
       </div>
-
-      {/* <div className="my-6 text-center">
-        <Button variant="soft">
-          Load more
-        </Button>
-      </div> */}
     </div>
   );
 }

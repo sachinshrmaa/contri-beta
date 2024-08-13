@@ -1,18 +1,24 @@
 "use client";
 
-import { Box, Button, Card, Text, TextField } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Card,
+  Dialog,
+  Flex,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import React, { useContext, useEffect, useState } from "react";
 import { FaCreditCard, FaTrash } from "react-icons/fa6";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { UserContext } from "../../../context/UserContext";
+import { handleLogout } from "../../../utils/logoutUser";
 
 export default function Settings() {
-  // const router = useRouter();
   const context = useContext(UserContext);
   const { user } = context;
-
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -20,6 +26,7 @@ export default function Settings() {
     newPassword: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   const handleUpdateProfile = async () => {
     let payload = {
@@ -30,14 +37,19 @@ export default function Settings() {
     };
     try {
       setIsLoading(true);
-      await axios.post(`http://localhost:4000/api/v1/auth/update`, payload, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `https://api-contri.sachinbuilds.in/api/v1/auth/update`,
+        payload,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success("Account updated sucessfully.", {
         position: "top-center",
         autoClose: 10000,
       });
       setIsLoading(false);
+      window.location.href = "/dashboard/settings";
     } catch (error) {
       setIsLoading(false);
       toast.error("Something went wrong. Try again later.", {
@@ -45,21 +57,21 @@ export default function Settings() {
         autoClose: 10000,
       });
     }
-    console.log("update profile");
+    console.log("Account details", payload);
   };
 
   const handleDeactivateAccount = async () => {
-    // await axios
-    //   .get(`http://localhost:4000/api/v1/auth/deactivate`, {
-    //     withCredentials: true,
-    //   })
-    //   .then((res) => {
-    //     // router.push("/login");
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
-    console.log("deactivate profile");
+    try {
+      await axios.get(
+        `https://api-contri.sachinbuilds.in/api/v1/auth/deactivate`,
+        {
+          withCredentials: true,
+        }
+      );
+      handleLogout();
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (
@@ -90,6 +102,12 @@ export default function Settings() {
                   type="text"
                   name="name"
                   defaultValue={user?.name}
+                  onChange={(e) =>
+                    setUserDetails((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
                   required
                 />
               </Box>
@@ -103,18 +121,30 @@ export default function Settings() {
                   type="email"
                   name="email"
                   defaultValue={user?.email}
+                  onChange={(e) =>
+                    setUserDetails((prev) => ({
+                      ...prev,
+                      email: e.target.value,
+                    }))
+                  }
                   required
                 />
               </Box>
 
               <Box>
                 <Text size="1" color="gray">
-                  Current password
+                  Current Password
                 </Text>
                 <TextField.Root
                   size="2"
                   type="password"
                   name="currentPassword"
+                  onChange={(e) =>
+                    setUserDetails((prev) => ({
+                      ...prev,
+                      currentPassword: e.target.value,
+                    }))
+                  }
                   required
                 />
               </Box>
@@ -127,13 +157,23 @@ export default function Settings() {
                   size="2"
                   type="password"
                   name="newPassword"
+                  onChange={(e) =>
+                    setUserDetails((prev) => ({
+                      ...prev,
+                      newPassword: e.target.value,
+                    }))
+                  }
                   required
                 />
               </Box>
             </div>
 
             <div className="mt-4">
-              <Button variant="soft" onClick={() => handleUpdateProfile()}>
+              <Button
+                variant="soft"
+                onClick={() => handleUpdateProfile()}
+                loading={isLoading}
+              >
                 Update
               </Button>
             </div>
@@ -182,7 +222,7 @@ export default function Settings() {
               <Button
                 color="red"
                 variant="soft"
-                onClick={handleDeactivateAccount}
+                onClick={() => setDeleteDialog(true)}
               >
                 <FaTrash /> Delete Account
               </Button>
@@ -190,6 +230,32 @@ export default function Settings() {
           </div>
         </Card>
       </div>
+
+      <Dialog.Root open={deleteDialog} onOpenChange={setDeleteDialog}>
+        <Dialog.Trigger>
+          <div style={{ display: "none" }} />
+        </Dialog.Trigger>
+        <Dialog.Content>
+          <Dialog.Title>Delete Account</Dialog.Title>
+          <Dialog.Description size="2" mb="4">
+            Are you sure you want to delete your account? This action cannot be
+            undone.
+          </Dialog.Description>
+
+          <Flex gap="3" mt="4" justify="end">
+            <Dialog.Close>
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            </Dialog.Close>
+            <Dialog.Close>
+              <Button color="red" onClick={handleDeactivateAccount}>
+                Delete
+              </Button>
+            </Dialog.Close>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
     </div>
   );
 }

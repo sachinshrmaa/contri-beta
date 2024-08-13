@@ -1,28 +1,14 @@
 "use client";
 import { Avatar, Box, DropdownMenu, Flex, Link, Text } from "@radix-ui/themes";
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { FaUser } from "react-icons/fa6";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { UserContext } from "../../context/UserContext";
+import { handleLogout } from "../../utils/logoutUser";
 
 export default function NavBar() {
   const context = useContext(UserContext);
   const { user } = context;
-
-  const handleLogout = async () => {
-    await axios
-      .get(`http://localhost:4000/api/v1/auth/logout`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        localStorage.removeItem("user");
-        window.location.href = "/login";
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  };
 
   return (
     <nav className="py-3 border-b">
