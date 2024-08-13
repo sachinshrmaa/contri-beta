@@ -13,11 +13,12 @@ import Link from "next/link";
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 export default function Login() {
+  const router = useRouter();
   const [user, setUser] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -28,8 +29,9 @@ export default function Login() {
         user,
         { withCredentials: true }
       );
+      router.push("/dashboard/groups");
       localStorage.setItem("user", JSON.stringify(res?.data?.user));
-      window.location.href = "/dashboard/groups";
+      // window.location.href = "/dashboard/groups";
       setIsSubmitting(false);
     } catch (error) {
       toast.error("Invalid email or password", {
