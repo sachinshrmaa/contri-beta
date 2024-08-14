@@ -15,7 +15,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { UserContext } from "../../../context/UserContext";
 import { handleLogout } from "../../../utils/logoutUser";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 export default function Settings() {
   const context = useContext(UserContext);
@@ -28,7 +28,7 @@ export default function Settings() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [deleteDialog, setDeleteDialog] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleUpdateProfile = async () => {
     let payload = {
@@ -51,7 +51,8 @@ export default function Settings() {
         autoClose: 10000,
       });
       setIsLoading(false);
-      router.push("/dashboard/settings");
+      window.location.href = "/dashboard/settings";
+      // router.push("/dashboard/settings");
     } catch (error) {
       setIsLoading(false);
       toast.error("Something went wrong. Try again later.", {
